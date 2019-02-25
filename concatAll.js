@@ -1,7 +1,7 @@
 const { of, interval } = require('rxjs');
 const { take, concatAll, map } = require('rxjs/operators');
 
-const simplePromise = val => new Promise(resolve => resolve(val));
+const simplePromise = val => new Promise(resolve => resolve(`Promise ${val}`));
 
 // concatAll 不是很明確，看起來是將 observable 的基本型別&基本物件撈出來並發出
 // 沒有撈出的話就會訂閱到 observable 物件
@@ -17,6 +17,7 @@ const source2 = interval(2000).pipe(
     map(value => simplePromise(value)),
     concatAll()
 );
+source2.subscribe(console.log);
 
 
 const obs1 = interval(1000).pipe(take(5));
@@ -30,7 +31,7 @@ const source3 = of(obs1, obs2, obs3).pipe(
     concatAll()
 );
 
-source3.subscribe(_ => console.log(_));
+// source3.subscribe(_ => console.log(_));
 
 
 // 如果要接續訂閱，要用 concat
