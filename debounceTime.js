@@ -1,9 +1,18 @@
 const { timer, of, interval } = require('rxjs');
-const { debounceTime, take } = require('rxjs/operators');
+const { distinctUntilChanged } = require('rxjs/operators');
 
-const source = interval(1000).pipe(take(5));
+const source = of(1, 2, 3, 4, 5, 5, 4, 4, 1, 1);
 
-source.pipe(
-    // debounceTime(1100)
-    debounceTime(900)
-).subscribe(console.log)
+const example = source.pipe(
+    distinctUntilChanged()
+);
+example.subscribe(console.log);
+
+
+const refObject = { name: 'skye' };
+const source2 = of(refObject, refObject, { name: 'kau' }, { name: 'kau' });
+
+const example2 = source2.pipe(
+    distinctUntilChanged()
+);
+example2.subscribe(console.log);
